@@ -2,11 +2,13 @@ package agent
 
 import (
 	"fmt"
+	"os"
 	"regexp"
 	"strings"
 	"travelAgent/cmd/llm"
 	"travelAgent/cmd/tool"
 
+	"github.com/joho/godotenv"
 	"github.com/sashabaranov/go-openai"
 )
 
@@ -32,14 +34,13 @@ var (
 )
 
 func init() {
-	API_KEY := "97e40081-f579-4ae6-91c9-56c29f4abb14"
-	BASE_URL := "https://ark.cn-beijing.volces.com/api/v3"
-	MODEL := "doubao-seed-1-6-251015"
-	config := openai.DefaultConfig(API_KEY)
-	config.BaseURL = BASE_URL
+	_ = godotenv.Load()
+
+	config := openai.DefaultConfig(os.Getenv("API_KEY"))
+	config.BaseURL = os.Getenv("BASE_URL")
 
 	LlmClient = llm.OpenAICompatibleClient{
-		Model:  MODEL,
+		Model:  os.Getenv("MODEL"),
 		Client: openai.NewClientWithConfig(config),
 	}
 }
